@@ -2,6 +2,7 @@ import csv
 from .utils import set_progress, create_hospital, activate_batch, get_progress
 from logging import getLogger
 from .utils import row_fingerprint, global_row_hash_store, create_hospital_with_backoff, activate_batch_with_backoff
+import time
 
 logger = getLogger("hospital-bulk-processor")
 
@@ -126,6 +127,7 @@ def process_bulk_hospitals(contents: str, batch_id: str):
                 "status": f"api_failed: {resp.status_code} {detail}"
             })
             failed += 1
+        time.sleep(1)
 
     batch_activated = False
     if failed == 0:
