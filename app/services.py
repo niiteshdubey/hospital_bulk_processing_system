@@ -81,8 +81,7 @@ def process_bulk_hospitals(contents: str, batch_id: str):
         if fingerprint in global_row_hash_store:
             logger.warning(f"Duplicate hospital row found (name={hospital['name']}, address={hospital['address']}). Skipping...")
             continue
-        # add if new
-        global_row_hash_store.add(fingerprint)
+        
         logger.info(f"Processing hospital {idx} of {total}: {hospital['name']}")
         set_progress(batch_id, {
             "progress": idx - 1,
@@ -112,6 +111,8 @@ def process_bulk_hospitals(contents: str, batch_id: str):
                 "status": "created"
             })
             processed += 1
+            # add if new
+            global_row_hash_store.add(fingerprint)
         else:
             logger.error(f"Failed to create hospital row {idx}: status={resp.status_code}")
             try:
